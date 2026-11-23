@@ -1,0 +1,14 @@
+{
+  "name": "ink-tutor",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Native Gemini Live teacher with an audio-worklet clock and timestamped vector whiteboard",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "test": "node --test tests/playback-sync.test.cjs tests/phase0.test.cjs tests/worklet.test.cjs",
+    "test:browser": "node tests/browser-sync.cjs",
+    "test:vectors": "node tests/vector-browser.cjs",
+    "test:live": "node tests/writing-live.cjs --controlled"
+  }
+}

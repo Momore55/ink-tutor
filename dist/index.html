@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ink Tutor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="./"><span class="logo">i.</span> ink tutor</a>
+    <span class="badge">LIVE CLASS</span>
+  </header>
+  <main>
+    <section class="intro"><div>
+      <p class="eyebrow">GEMINI TUTOR</p>
+      <h1>What would you like to learn?</h1>
+      <p>Start a class, ask a question aloud, and work through it on the whiteboard.</p>
+    </div></section>
+    <div class="workspace">
+      <section class="board-panel">
+        <div class="board-top"><span><i></i> THE WHITEBOARD</span><span id="state" role="status">Ready</span></div>
+        <svg id="board" viewBox="0 0 900 620" role="img" aria-label="Live whiteboard">
+          <defs><pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".7" fill="#fff" opacity=".09"/></pattern></defs>
+          <rect width="900" height="620" fill="url(#dots)"/>
+          <g id="ink"></g>
+        </svg>
+        <div class="controls">
+          <button id="start-class" class="primary">Start class</button>
+          <button id="pause-tutor" class="secondary" disabled>Pause tutor</button>
+          <button id="mute-mic" class="secondary" disabled>Mute mic</button>
+        </div>
+      </section>
+      <aside class="narration">
+        <span class="eyebrow">TUTOR’S EXPLANATION</span>
+        <p id="caption" aria-live="polite">Start class and tell Gemini what you want to learn.</p>
+        <p id="transcript"></p>
+        <form id="board-question">
+          <label for="question">Or type to the same live tutor</label>
+          <input id="question" maxlength="500" required placeholder="What would you like to learn?">
+          <button type="submit">Send to tutor</button>
+        </form>
+        <details id="canvas-panel" class="learning-panel" hidden open>
+          <summary>Illustrations</summary>
+          <div id="canvas-jobs"></div>
+        </details>
+        <details class="learning-panel">
+          <summary>Solve a problem with OpenMath</summary>
+          <form id="math-problem">
+            <label for="math-source">Word problem or equation photo</label>
+            <input id="math-source" maxlength="1500" placeholder="Enter a word problem">
+            <input id="math-photo" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Equation photo">
+            <button id="math-read" type="button">Read with Gemini</button>
+            <label for="math-expression">Check the formula, or enter one directly</label>
+            <input id="math-expression" maxlength="500" required placeholder="Enter an equation or expression">
+            <button type="submit">Solve and explain live</button>
+            <p id="math-status" role="status"></p>
+          </form>
+        </details>
+        <details class="learning-panel">
+          <summary>Writing timing</summary>
+          <p>Writing follows the browser’s speaker clock. If the pen appears early, add a small delay. This changes writing only and applies to your next class.</p>
+          <label for="writing-delay">Extra writing delay: <output id="writing-delay-value">0 ms</output></label>
+          <input id="writing-delay" type="range" min="0" max="250" step="10" value="0">
+          <button id="timing-test" type="button">Test sound and pen</button>
+          <svg id="timing-preview" viewBox="0 0 240 40" aria-label="Three pen strokes for the timing test"></svg>
+          <p id="timing-status" role="status">Test on the speakers or headphones you use for class.</p>
+        </details>
+        <details class="learning-panel">
+          <summary>Lesson plan and learning notes</summary>
+          <p id="learning-storage">Saved in this browser and shared with Gemini when a class starts.</p>
+          <h3 id="learning-goal">Choose a topic to begin a lesson plan.</h3>
+          <ol id="learning-plan"></ol>
+          <ul id="learning-notes"></ul>
+          <button id="clear-learning" type="button">Clear plan and learning notes</button>
+        </details>
+      </aside>
+    </div>
+  </main>
+  <script src="learning-state.js?v=teaching-2"></script>
+  <details id="sync-panel" hidden><summary>Playback diagnostics (approximate timing)</summary><pre id="sync-diagnostics"></pre></details>
+  <section id="phase0-panel" hidden>
+    <h2>Phase 0 speaker and timing test</h2>
+    <p>Developer test mode. Microphone audio is sent to Gemini for the class but is never stored by this probe. Reports contain timing metadata by default.</p>
+    <label>Output <select id="phase0-output"><option value="speakers">PC speakers</option><option value="wired">Wired headphones</option><option value="bluetooth">Bluetooth</option></select></label>
+    <label>Tool acknowledgments <select id="phase0-scheduling"><option>WHEN_IDLE</option><option>SILENT</option><option>OMIT</option></select></label>
+    <label>Lookahead (ms) <input id="phase0-lookahead" type="number" min="1" max="400" value="80"></label>
+    <label><input id="phase0-word-timestamps" type="checkbox">Probe native output word timestamps</label>
+    <label><input id="phase0-capture-text" type="checkbox">Include transcript text in this local report</label>
+    <label><input id="phase0-capture-audio" type="checkbox">Keep generated tutor audio locally for analysis (up to 6 MB)</label>
+    <label>Test question <input id="phase0-question" maxlength="500" placeholder="What would you like explained?"></label>
+    <button id="phase0-start">Start microphone test</button>
+    <p>Settings apply when starting a new class. Start class, allow microphone access, then ask a question. Listen silently first to check for speaker echo. Mark an interruption, then say “Wait, explain that again.” Repeat when ready.</p>
+    <button id="phase0-mark-quiet">Mark quiet listening</button>
+    <button id="phase0-mark-interrupt">Mark planned interruption</button>
+    <button id="phase0-download">Download local timing report</button>
+    <button id="phase0-finish">Finish device test</button>
+    <p id="phase0-status" role="status"></p>
+  </section>
+  <script src="live-config.js?v=canvas-1"></script>
+  <script src="board-math.js?v=notation-2"></script>
+  <script src="phase0-probe.js?v=phase0-1"></script>
+  <script src="audio-output.js?v=1"></script>
+  <script src="playback-sync.js?v=worklet-1"></script>
+  <script src="stroke-protocol.js?v=1"></script>
+  <script src="board-scene.js?v=vector-1"></script>
+  <script src="canvas-jobs.js?v=1"></script>
+  <script src="gemini-adapter.js?v=phase0-1"></script>
+  <script src="app.js?v=canvas-1"></script>
+</body>
+</html>

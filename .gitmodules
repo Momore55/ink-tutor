@@ -1,0 +1,3 @@
+[submodule "OpenMath"]
+	path = OpenMath
+	url = https://github.com/ndunl075/OpenMath.git

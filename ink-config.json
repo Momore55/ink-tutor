@@ -1,0 +1,4 @@
+{
+  "liveModelId": "models/gemini-3.8-live",
+  "textModelId": "gemini-3.8-flash"
+}
