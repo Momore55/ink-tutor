@@ -1,4 +1,5 @@
 /* Gemini Live tutor and sequential whiteboard handwriting. */
+globalThis.InkAppReady=false;
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const glyphs={
  '0':['M8 2 C-2 2 -1 29 7 30 C18 31 19 0 8 2'],
@@ -704,3 +705,5 @@ if(phase0Mode) {
     closeVoice('Device test finished. Timing metadata is available for review.');
   };
 }
+
+globalThis.InkAppReady=true;

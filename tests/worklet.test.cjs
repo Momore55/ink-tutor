@@ -1,6 +1,6 @@
 const {test}=require('node:test');const assert=require('node:assert/strict');
 const fs=require('node:fs');const vm=require('node:vm');
-require('../stroke-protocol.js');require('../playback-sync.js');
+require('../stroke-protocol.js');require('../playback-bridge.js');
 function fixture(rate=24000){
  const messages=[];let Processor;
  const sandbox={sampleRate:rate,currentFrame:0,ArrayBuffer,Int16Array,Float32Array,

@@ -53,7 +53,7 @@ let browser,socket;
     };
   `});
   await cdp('Page.navigate',{url:'http://127.0.0.1:'+port+'/?debugSync=1'});
-  for(let i=0;i<100;i++){if(await evaluate("Boolean(document.getElementById('board-question') && globalThis.InkSync)"))break;await delay(100);}
+  for(let i=0;i<100;i++){if(await evaluate("Boolean(document.getElementById('board-question') && globalThis.InkAppReady)"))break;await delay(100);}
   const question=live?'Teach x + 2 = 5 using small spoken and writing units. Write the equation, circle the added 2 while explaining it, show subtraction from both sides, and finish with x = 3. Explain why each operation works.':'Synthetic timing test';
   await evaluate('document.getElementById("question").value='+JSON.stringify(question)+'; document.getElementById("board-question").requestSubmit(document.querySelector("#board-question button"))');
   if(live) {

@@ -22,6 +22,7 @@ globalThis.pcm=seconds=>{const bytes=new Uint8Array(24000*seconds*2);return btoa
   await browser.evaluate(`document.getElementById('question').value='Vector regression';document.getElementById('board-question').requestSubmit(document.querySelector('#board-question button'));`);
   for(let i=0;i<100;i++){if(await browser.evaluate('!!voiceSession?.connected'))break;await delay(50);}
   assert.equal(await browser.evaluate('voiceSession.sync.diagnostics().output'),'audio_worklet');
+  assert.equal(await browser.evaluate('voiceSession.sync.diagnostics().strokeDriver'),'supplied_playback_synchronizer');
   const stroke={id:'trace',type:'freedraw',onsetOffsetMs:500,durationMs:500,points:[{x:60,y:80},{x:120,y:120},{x:180,y:80}],color:'#eec57e'};
   await browser.evaluate(`fakeSocket.emit({toolCall:{functionCalls:[{id:'draw',name:'draw_strokes',args:{segmentId:'drawing',strokes:[${JSON.stringify(stroke)}]}}]}});fakeSocket.emit({serverContent:{modelTurn:{parts:[{inlineData:{mimeType:'audio/pcm;rate=24000',data:pcm(2)}}]},generationComplete:true,turnComplete:true}});`);
   await delay(200);assert.equal(await browser.evaluate('boardScene.snapshot().length'),0);
@@ -29,6 +30,7 @@ globalThis.pcm=seconds=>{const bytes=new Uint8Array(24000*seconds*2);return btoa
   await browser.evaluate(`(()=>{const until=performance.now()+500;while(performance.now()<until){}return true})()`);await delay(80);
   const after=await browser.evaluate('voiceSession.output.clock.samplesProcessed');assert(after-before>=10000);
   await delay(1200);assert.equal(await browser.evaluate('boardScene.snapshot()[0].status'),'completed');
+  assert(await browser.evaluate(`!!document.querySelector('#ink path[d*="C "]')`));
   await browser.evaluate(`fakeSocket.emit({toolCall:{functionCalls:[{id:'delegate',name:'delegatePrompt',args:{intent:'An arbitrary triangle-like trajectory',narration:'A shape is drawn while we explain it.'}}]}});fakeSocket.emit({serverContent:{modelTurn:{parts:[{inlineData:{mimeType:'audio/pcm;rate=24000',data:pcm(2)}}]},generationComplete:true,turnComplete:true}});`);
   await delay(100);assert.equal(await browser.evaluate(`fakeSocket.sent.flatMap(m=>m.toolResponse?.functionResponses||[]).find(r=>r.id==='delegate')?.response.status`),'delegated');
   await delay(2400);assert.equal(await browser.evaluate(`[...voiceSession.canvasJobs.values()][0].status`),'prepared');

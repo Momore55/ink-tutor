@@ -47,9 +47,12 @@ Open [Ink Tutor locally](http://127.0.0.1:7860/), allow the microphone, and clic
 | `canvas_agent.py` | Separate Gemini vision/text specialist streaming validated vector strokes |
 | `audio-playback-worklet.js` | Off-thread bounded PCM queue, resampling, sample clock, epoch flush |
 | `audio-output.js` | Worklet transport and completion/clock observations |
-| `playback-sync.js` | PCM-to-playback mapping, latency compensation, stroke timing and interruption |
+| `playback-sync.js` | User-supplied exported PlaybackSynchronizer class, preserved unchanged |
+| `playback-bridge.js` | Connects the supplied synchronizer to PCM/sample windows, worklet playback and existing tool state |
 | `stroke-protocol.js` | Validated freehand/text/primitive stroke serialization |
-| `board-scene.js` | Progressive SVG geometry, equations, annotations and arbitrary vector paths |
+| `board-scene.js` | User-supplied exported BoardScene class with spline rendering, preserved unchanged |
+| `board-bridge.js` | Math/annotation compatibility and integration of the supplied spline renderer |
+| `tutor-bootstrap.js` | Loads the supplied ES modules before starting the existing app |
 | `canvas-jobs.js` | Async delegation, canvas image/state feedback, cancellation and removal |
 | `live-config.js` | One teaching policy and separate technical tool contracts |
 | `OpenMath/` | Pinned external symbolic solver submodule |

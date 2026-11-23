@@ -4,6 +4,14 @@
 
 ## Requirement mapping
 
+### User supplied module replacement
+
+The two corrections supplied on 23 November replace `board-scene.js` and `playback-sync.js` verbatim, including their ES-module exports. `tutor-bootstrap.js` imports BoardScene and PlaybackSynchronizer before loading the application. The source and served copies were compared by SHA-256 and match the supplied files exactly.
+
+Their exported interfaces differ from the app's earlier tool interfaces. `board-bridge.js` keeps mathematical layout, object identity, annotations and partial scene state, while using the supplied BoardScene for smooth vector paths. `playback-bridge.js` feeds sample-clock keyframes to the supplied PlaybackSynchronizer and connects its rendering callbacks to existing geometry. It owns the single application render loop, suppressing a duplicate scheduled loop, and uses an already-compensated media clock to avoid subtracting hardware delay twice. It refreshes keyframes when streamed speech windows are fitted. The supplied modules themselves are unmodified.
+
+39 existing Node checks and both synthetic real-browser regressions passed after replacement. Browser verification explicitly checks that the supplied synchronizer is the active stroke driver and the vector renderer emits spline curves. Source-node adapters remain available for deterministic unit tests; the actual browser keeps AudioWorklet output. New real Gemini/device acceptance is not implied by these synthetic results.
+
 | Specification section | Implementation |
 | --- | --- |
 | 1 Transport mismatch | Tool receipt prepares geometry only. Rendering observes played audio, not WebSocket receipt. |

@@ -1,6 +1,6 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
-require('../playback-sync.js');
+require('../playback-bridge.js');
 require('../gemini-adapter.js');
 function fixture(config={}) {
   const context={currentTime:0,state:'running',destination:{},
